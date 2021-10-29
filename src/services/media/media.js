@@ -28,22 +28,19 @@ const reviewsJSON = join(
 const getReviews = () => readJSON(reviewsJSON)
 const getMedia = () => readJSON(mediaJSON);
 const writeMedia = (media) => writeJSON(mediaJSON, media);
+const writeReviews = (revs) => writeJSON(reviewsJSON, revs)
 
 
 
 
-//delete media
 
 //add poster to single media
+// add pdf to dowload reviews 
 
 
-// post and delete Reviews
-
-//export pdf with revs
 
 mediaRouter.post('/', async (req, res, next) =>{
     const newMedia = {
-        _id: uniqid(),
         ...req.body,
         imdbID: uniqid()
     };
@@ -141,7 +138,35 @@ mediaRouter.delete('/:id', async (req, res, next) =>{
 })
 
 
+mediaRouter.post('/:id/reviews', async (req, res, next)=>{
 
+    const newReview = {
+        ...req.body,
+        _id: uniqid(),
+        elementId: req.params.id,
+      
+        createdAt: new Date()
+    };
+
+    const reviews = await getReviews();
+
+    reviews.push(newReview);
+
+    await writeJSON(reviewsJSON, reviews);
+
+    res.status(201).send(newReview);
+    
+})
+
+
+mediaRouter.delete('/:id/reviews', async (req, res, next)=>{
+    const reviews = await getReviews()
+    const  deletedRevs = reviews.filter((revs)=>revs._id!==req.params.id)
+
+    await writeReviews(deletedRevs)
+
+    res.status(204).send('reviewhas been deleted')
+})
 
 
 
