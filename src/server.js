@@ -22,7 +22,9 @@ server.use('/media', mediaRouter)
 const port = 3001
 
 
-// console.table()
+
+console.table(listEndpoints(server));
+
 
 server.listen(port, ()=>{
     console.log('server running on port:', port)
