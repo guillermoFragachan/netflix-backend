@@ -62,7 +62,7 @@ mediaRouter.put('/:id', async (req, res, next) =>{
 
     const media = await getMedia()
 
-    const mediaIndex = media.findIndex(media=>media.title===req.params.id)
+    const mediaIndex = media.findIndex(media=>media.imdbID===req.params.id)
 
     const updatedMedia = {
         ...media[mediaIndex],
@@ -79,24 +79,36 @@ mediaRouter.put('/:id', async (req, res, next) =>{
 mediaRouter.get("/", async (req, res, next) => {
     try {
       const media = await getMedia();
-      const revs = await getReviews()
+        const revs = await getReviews()
+        media.map((media)=>{
 
-      media.map((media)=>{
-
-        revs.map((revs)=>{
-
-            if(media.imdbID===revs.elementId){
-                media.reviews = revs
-                
-          }
+          revs.map((revs)=>{
+  
+              if(media.imdbID===revs.elementId){
+                  media.reviews = revs
+                  
+            }
+          })
         })
+
+        
+
+      if(req.query){
+        console.log(media[0].Title)
+       const filtered = media.filter((media) => media.Title.includes(req.query.title))
+        console.log(filtered)
+        res.status(200).send(filtered);
+      }else{
+       
+        res.status(200).send(media);
+      }
          
 
 
-      })
+  
       
    
-        res.status(200).send(media);
+       
      
     } catch (error) {
       next(error);
