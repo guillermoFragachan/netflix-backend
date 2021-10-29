@@ -5,13 +5,9 @@ import express from "express";
 import uniqid from "uniqid";
 import multer from "multer";
 import { extname } from "path";
-import sgMail from "@sendgrid/mail";
-import createHttpError from "http-errors";
-import { pipeline } from "stream";
-import json2csv from "json2csv";
-import { get } from "http";
-import { read } from "fs";
-
+import { CloudinaryStorage } from "multer-storage-cloudinary"
+import { v2 as cloudinary } from "cloudinary"
+ 
 
 
 const { readJSON, writeJSON, writeFile, createReadStream } = fs;
@@ -35,9 +31,20 @@ const writeReviews = (revs) => writeJSON(reviewsJSON, revs)
 
 
 
+const { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = process.env;
+
+cloudinary.config({
+  cloud_name: CLOUDINARY_NAME,
+  api_key: CLOUDINARY_KEY,
+  api_secret: CLOUDINARY_SECRET,
+});
+
+
+const cloudinaryStorage = new CloudinaryStorage({
+	cloudinary:cloudinary
+})
 
 //add poster to single media
-//fix search
 // add pdf to dowload reviews 
 
 
@@ -181,6 +188,19 @@ mediaRouter.delete('/:id/reviews', async (req, res, next)=>{
     await writeReviews(deletedRevs)
 
     res.status(204).send('reviewhas been deleted')
+})
+
+
+
+mediaRouter.put('/:idIMG/img', multer({storage:cloudinaryStorage}).single('Poster'), async(req, res, next)=>{
+  const media = getMedia()
+  const mediaIndex = media.findIndex(media=>media.imdbID===req.params.idIMG)
+
+  media[mediaIndex].Poster = req.file.path
+  await writeMedia(media)
+
+  res.status(201).send(media[mediaIndex])
+
 })
 
 
