@@ -100,7 +100,7 @@ mediaRouter.get("/", async (req, res, next) => {
 
         
 
-      if(req.query){
+      if(req.query.title){
         console.log(media[0].Title)
        const filtered = media.filter((media) => media.Title.includes(req.query.title))
         console.log(filtered)
