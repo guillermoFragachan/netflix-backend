@@ -31,9 +31,6 @@ const writeMedia = (media) => writeJSON(mediaJSON, media);
 
 
 
-// post media
-
-//update media
 
 //delete media
 
@@ -43,6 +40,42 @@ const writeMedia = (media) => writeJSON(mediaJSON, media);
 // post and delete Reviews
 
 //export pdf with revs
+
+mediaRouter.post('/', async (req, res, next) =>{
+    const newMedia = {
+        _id: uniqid(),
+        ...req.body,
+        imdbID: uniqid()
+    };
+
+    const media = await getMedia();
+
+    media.push(newMedia);
+
+    await writeJSON(mediaJSON, media);
+
+    res.status(201).send(newMedia);
+
+
+})
+mediaRouter.put('/:id', async (req, res, next) =>{
+
+    const media = await getMedia()
+
+    const mediaIndex = media.findIndex(media=>media.imdbID===req.params.id)
+
+    const updatedMedia = {
+        ...media[mediaIndex],
+        ...req.body
+    }
+    media[mediaIndex] = updatedMedia
+
+    await writeJSON(mediaJSON, media)
+
+    res.status(200).send(updatedMedia)
+
+})
+
 mediaRouter.get("/", async (req, res, next) => {
     try {
       const media = await getMedia();
@@ -83,7 +116,6 @@ mediaRouter.get("/:id", async (req, res, next) => {
    
 
     singleMedia[0].reviews= revsById
-    console.log(singleMedia)
 
 
     res.status(200).send(singleMedia)
@@ -96,6 +128,18 @@ mediaRouter.get("/:id", async (req, res, next) => {
     next(error);
   }
 });
+mediaRouter.delete('/:id', async (req, res, next) =>{
+
+    const media = await getMedia()
+    const deletedMedia = media.filter((media)=> media.imdbID!==req.params.id)
+
+
+    await writeMedia(deletedMedia)
+
+    res.status(204).send(media)
+    
+})
+
 
 
 
