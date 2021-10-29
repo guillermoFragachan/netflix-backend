@@ -12,6 +12,8 @@ import json2csv from "json2csv";
 import { get } from "http";
 import { read } from "fs";
 
+
+
 const { readJSON, writeJSON, writeFile, createReadStream } = fs;
 
 const mediaRouter = express.Router();
@@ -35,6 +37,7 @@ const writeReviews = (revs) => writeJSON(reviewsJSON, revs)
 
 
 //add poster to single media
+//fix search
 // add pdf to dowload reviews 
 
 
@@ -59,7 +62,7 @@ mediaRouter.put('/:id', async (req, res, next) =>{
 
     const media = await getMedia()
 
-    const mediaIndex = media.findIndex(media=>media.imdbID===req.params.id)
+    const mediaIndex = media.findIndex(media=>media.title===req.params.id)
 
     const updatedMedia = {
         ...media[mediaIndex],
