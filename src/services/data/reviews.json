@@ -1,0 +1,23 @@
+[
+    {
+        "_id": "6546", 
+        "comment": "A good book but definitely I don't like many parts of the plot", 
+        "rate": 3, 
+        "elementId": "tt0120737", 
+        "createdAt": "2019-08-01T12:46:45.895Z"
+    },
+    {
+        "_id": "123455",
+        "comment": "A good book but definitely I don't like many parts of the plot", 
+        "rate": 3, 
+        "elementId": "tt0120737", 
+        "createdAt": "2019-08-01T12:46:45.895Z"
+    },
+    {
+        "_id": "23123",
+        "comment": "A good book but definitely I don't like many parts of the plot", 
+        "rate": 3,
+        "elementId": "5d318e1a8541744830bef139", 
+        "createdAt": "2019-08-01T12:46:45.895Z" 
+    }
+]
