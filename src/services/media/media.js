@@ -193,7 +193,7 @@ mediaRouter.delete('/:id/reviews', async (req, res, next)=>{
 
 
 mediaRouter.put('/:idIMG/img', multer({storage:cloudinaryStorage}).single('Poster'), async(req, res, next)=>{
-  const media = getMedia()
+  const media = await getMedia()
   const mediaIndex = media.findIndex(media=>media.imdbID===req.params.idIMG)
 
   media[mediaIndex].Poster = req.file.path
